@@ -1,0 +1,105 @@
+WEBSITE CODE
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESP32 Camera OCR Reader</title>
+<!-- OCR Library -->
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+<style>
+body{
+font-family: Arial, sans-serif;
+background:#111;
+color:white;
+text-align:center;
+padding:20px;
+}
+h1{
+color:#4CAF50;
+}
+input{
+padding:10px;
+font-size:16px;
+width:200px;
+}
+button{
+padding:10px 15px;
+font-size:16px;
+background:#4CAF50;
+color:white;
+border:none;
+cursor:pointer;
+}
+button:hover{
+background:#45a049;
+}
+img{
+margin-top:20px;
+border:3px solid white;
+}
+#output{
+margin-top:20px;
+font-size:20px;
+color:yellow;
+}
+</style>
+</head>
+<body>
+<h1>ESP32 Camera OCR Reader</h1>
+<p>Enter ESP32 Camera IP Address</p>
+<input id="ipAddress" placeholder="Example: 192.168.1.45">
+<button onclick="connectCamera()">Connect Camera</button>
+<br><br>
+<img id="cameraFeed" width="320">
+<canvas id="captureCanvas" width="320" height="240" style="display:none;"></canvas>
+<h2>Detected Text</h2>
+<p id="output">Waiting for text...</p>
+
+<script>
+/* CONNECT TO CAMERA */
+function connectCamera(){
+let ip = document.getElementById("ipAddress").value;
+let cameraURL = "http://" + ip + "/stream";
+document.getElementById("cameraFeed").src = cameraURL;
+/* start scanning every 3 seconds */
+setInterval(scanFrame,3000);
+}
+/* CAPTURE FRAME AND RUN OCR */
+function scanFrame(){
+let image = document.getElementById("cameraFeed");
+let canvas = document.getElementById("captureCanvas");
+let ctx = canvas.getContext("2d");
+/* draw frame */
+ctx.drawImage(image,0,0,320,240);
+
+/* run OCR */
+
+Tesseract.recognize(canvas,'eng')
+.then(function(result){
+let detectedText = result.data.text.trim();
+if(detectedText.length > 3){
+document.getElementById("output").innerText = detectedText;
+/* speak text */
+let speech = new SpeechSynthesisUtterance(detectedText);
+speech.rate = 1;
+speechSynthesis.speak(speech);
+}
+});
+}
+</script>
+</body>
+</html>
+
+
+IT IS THE CODE FOR WEBSITE WHERE THE IP ADRESS TO BE PASTED 
+IT IS A AI GENERATED CODE 
+IT IS VERIFED MANY TIME IT IS SUCCESSFULLY VERIFED
+
+PROCEDURE
+1.SAVE THE CODE IN THE NOTEPAD
+2.SAVE THE NOTEPAD WITH .HTML
+3.OPEN THE FILE SO IT IS REDIRETED TO WEB BROSWER
+4.PASTE THE IP OF CAMERA IN THE GIVEN PLACE
+5.IT WILL WORK
